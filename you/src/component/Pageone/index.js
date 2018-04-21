@@ -96,7 +96,7 @@ export default class Pageone extends Component {
                             </View>
                         </View>
 
-                        <View style={{ borderColor: '#7b7a7c', borderBottomWidth:0.4, margin:10, width: width }}/> 
+                        <View style={{ borderColor: '#eaeaea', borderBottomWidth:0.4, margin:10, width: width }}/> 
 
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flex: 1 }}>
@@ -144,7 +144,7 @@ export default class Pageone extends Component {
                             </View>
                         </View>
 
-                        <View style={{ borderColor: '#7b7a7c', borderBottomWidth:0.4, margin:10, width: width }}/>
+                        <View style={{ borderColor: '#eaeaea', borderBottomWidth:0.4, margin:10, width: width }}/>
 
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flex: 1 }}>
@@ -190,6 +190,47 @@ export default class Pageone extends Component {
                                     <View style={{ flexDirection: 'row', borderBottomColor: '#7b7a7c', borderBottomWidth: 0.5, paddingBottom: 0, marginBottom: 20 }} />
                                 </Collapsible>
                             </View>
+                        </View>
+
+                    </View>
+
+                    <View style={ stylePayment.boxgroundPayment }>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ flex: 1 }}>
+                                <Text style={ stylePayment.payText }>Price</Text>
+                            </View>
+                            <View style={{ flex: -1 }}>
+                                <Text style={ stylePayment.payText }>IDR 200.000</Text>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ flex: 1 }}>
+                                <Text style={ stylePayment.payText }>Door to door (driver)</Text>
+                            </View>
+                            <View style={{ flex: -1 }}>
+                                <Text style={ stylePayment.payText }>IDR 50.000</Text>
+                            </View>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ flex: 1 }}>
+                                <Text style={ stylePayment.payTotal }>Total Payment</Text>
+                            </View>
+                            <View style={{ flex: -1 }}>
+                                <Text style={ stylePayment.nominalTotal }>IDR 250.000</Text>
+                            </View>
+                        </View>
+
+                        <View style={{ borderColor: '#eaeaea', borderBottomWidth:0.5, margin:10, width: width }}/>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={ stylePayment.respPay }>Responsible for payment</Text>
+                        </View>
+
+                        <View style={{ borderColor: '#eaeaea', borderBottomWidth:0.5, margin:10, width: width }}/>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ flex: 1, color: '#000', fontSize: 14, fontWeight: 'bold' }}>Pay with</Text>
                         </View>
 
                     </View>
@@ -280,5 +321,36 @@ const styles = StyleSheet.create({
         width: 30,
         resizeMode : 'stretch',
         alignItems: 'center'
+    }
+})
+
+const stylePayment = StyleSheet.create({
+    boxgroundPayment: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+        padding: 25
+    },
+    payText: {
+        color: '#000',
+        fontSize: 16
+    },
+    payTotal: {
+        color: '#361c8e',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 3
+    },
+    nominalTotal: {
+        color: '#361c8e',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    respPay: {
+        flex: 1,
+        color: '#000',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 })
