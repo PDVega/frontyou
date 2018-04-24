@@ -9,18 +9,28 @@ import {    StyleSheet,
             TouchableHighlight,
             Image,
             TextInput,
-            Dimensions
+            Dimensions,
+            TouchableOpacity,
+            Platform
         } from 'react-native';
 
 const { height, width } = Dimensions.get('window')
 
 export default class Pageone extends Component {
-    state = {
-        isSenderCollapsed: true,
-        isReceiver1Collapsed: true,
-        isReceiver2Collapsed: true
-    };
-
+    constructor(props){
+        super(props)
+        this.state = {
+            isSenderCollapsed: true,
+            isReceiver1Collapsed: true,
+            isReceiver2Collapsed: true,
+            paidBy: [ { by: 'Sender' }, { by: 'Receiver' } ],
+            payWith:[
+                {image:require('../../images/cash.png'), with: 'Cash'},
+                {image:require('../../images/wallet.png'), with: 'Wallet'},
+                {image:require('../../images/bill.png'), with: 'Billed'}
+            ],
+        }
+    }
 
     _toggleSender = () => {
         this.setState ({ isSenderCollapsed: !this.state.isSenderCollapsed })
@@ -33,8 +43,39 @@ export default class Pageone extends Component {
     }
 
     render() {
+
+        let payment = this.state.paidBy.map((pay, idx) => {
+            return (
+                <TouchableOpacity onPress={() => this.setState({init: idx})} key={idx}>
+                    <View style={ stylePayment.paymentBox }>
+                        <View style={ stylePayment.radioBtnLeft }>
+                            <View style={ this.state.init !== idx ? stylePayment.no : stylePayment.yes } />
+                        </View>
+                        <View style={ stylePayment.radioBtnRight }>
+                            <Text style={ this.state.init !== idx ? stylePayment.txtNo : stylePayment.txtYes }>
+                                {pay.by}
+                            </Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            )
+        })
+
+        let dataPayFrom = this.state.payWith.map((data,index)=>{
+            return(
+                <TouchableOpacity onPress={()=>this.setState({initialPay:index})} key={index}>
+                    <View style={ stylePayment.containerPayFrom }>
+                        <Image style={{width:40, height:40}} source={data.image}/>
+                        <Text style={this.state.initialPay !== index ? stylePayment.txtNo : stylePayment.txtYes }>
+                            { data.with }
+                        </Text>        
+                    </View>
+                </TouchableOpacity>
+            )
+        })
+
         return (
-            <View>
+            <View style={{height:height}}>
                 <View style={ header.container }>
                     <Icon name="md-arrow-round-back" size={30} style={ header.icon } />
                     <Text style={ header.text }>Confirm Order</Text>
@@ -42,7 +83,9 @@ export default class Pageone extends Component {
                 <ScrollView>
                     <View style={ styles.cardPhoto }>
                         <Text style={ styles.txt }>Your Package Photo </Text>
-                        <Icon name="ios-add-circle" size={30} style={ styles.iconPlus } />
+                        <TouchableOpacity onPress={()=> alert('Take picture!') }>                        
+                            <Icon name="ios-add-circle" size={30} style={ styles.iconPlus } />
+                        </TouchableOpacity>
                     </View>
 
                     <View style={ styles.cardAddr }>
@@ -50,6 +93,7 @@ export default class Pageone extends Component {
                             Enter contact number (sender dan receiver) and note for the driver
                         </Text>
 
+                        
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flex: 1 }}>
                                 <Icon name="md-pin" size={32} style={ styles.iconPin } />
@@ -226,12 +270,23 @@ export default class Pageone extends Component {
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={ stylePayment.respPay }>Responsible for payment</Text>
                         </View>
+                        <View style={{flexDirection:'row'}}>{ payment }</View>
 
                         <View style={{ borderColor: '#eaeaea', borderBottomWidth:0.5, margin:10, width: width }}/>
 
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ flex: 1, color: '#000', fontSize: 14, fontWeight: 'bold' }}>Pay with</Text>
+                        <View style={{ flexDirection:'row', justifyContent:'space-between'}}>
+                            <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+                                <Text style={{ flex: 1, color: '#000', fontSize: 14, fontWeight: 'bold' }}>Pay with</Text>
+                            </View>
                         </View>
+                        <View style={{ flexDirection:'row' }}>{ dataPayFrom }</View>
+
+                        <TouchableOpacity onPress={()=> alert('Congratulations your order will be processing!') }>
+                            <View style={{ backgroundColor: '#5E50A1', marginTop:20, marginBottom:0, borderRadius:10,
+                                width:width*0.9, height:50, alignItems:'center', justifyContent:'center' }}>
+                                <Text style={{ color:'#ffffff', fontWeight:'bold' }}>Order </Text>              
+                            </View>
+                        </TouchableOpacity>
 
                     </View>
                                         
@@ -330,7 +385,9 @@ const stylePayment = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#ffffff',
-        padding: 25
+        padding:25,
+        marginBottom: 5,
+        width: width
     },
     payText: {
         color: '#000',
@@ -352,5 +409,55 @@ const stylePayment = StyleSheet.create({
         color: '#000',
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    paymentBox: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'flex-start',
+        height: 35
+    },
+    radioBtnLeft: {
+        marginRight:10,
+        paddingTop: 10,
+        width: 20,
+        height: 20
+    },
+    radioBtnRight: {
+        marginRight:10,
+        paddingTop: 7,
+    },
+    no: {
+        width: 15,
+        height: 15,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        borderColor: 'black'
+    },
+    yes: {
+        width: 14,
+        height: 14,
+        backgroundColor: '#361c8e',
+        marginHorizontal: 10,
+        borderRadius: 10
+    },
+    txtNo: {
+        fontSize: 14,
+        color: '#5E50A1'
+    },
+    txtYes: {
+        fontSize: 14,
+        color: '#5E50A1',
+        fontWeight: 'bold'
+    },
+    containerPayFrom: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 0.5,
+        borderColor: '#949396',
+        margin: 5,
+        borderRadius: 5,
+        height: 75,
+        width:65
     }
 })
